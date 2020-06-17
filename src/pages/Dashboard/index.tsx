@@ -62,9 +62,14 @@ const Dashboard: React.FC = () => {
     async function loadFoods(): Promise<void> {
       // Load Foods from API
 
-      const filterParam = searchValue
-        ? { name: searchValue }
-        : { category: selectedCategory };
+      /* const filterParam = searchValue
+        ? { name_like: searchValue }
+        : { category_like: selectedCategory }; */
+
+      const filterParam = {
+        category_like: selectedCategory,
+        name_like: searchValue || undefined,
+      };
 
       try {
         const { data } = await api.get<Food[]>('/foods', {
@@ -94,12 +99,12 @@ const Dashboard: React.FC = () => {
     }
 
     loadCategories();
-  }, [selectedCategory, searchValue]);
+  }, []);
 
   function handleSelectCategory(id: number): void {
     // Select / deselect category
     setSearchValue('');
-    setSelectedCategory(id);
+    setSelectedCategory(id === selectedCategory ? undefined : id);
   }
 
   return (
